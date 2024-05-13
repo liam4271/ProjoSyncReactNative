@@ -8,7 +8,7 @@ import ResearchIcon from '../icon/ResearchIcon';
 const Research = () =>  {
     return (
         <View style={styles.container} >
-            <Input placeholderInput="Rechercher un projet" placeholderColor="#999999" fontSize="9" />
+            <Input placeholderInput="Rechercher un projet" placeholderColor="#999999" fontSize={9} />
             <ResearchIcon height={10} width={10} fill={'#999999'} />
         </View>
     )
