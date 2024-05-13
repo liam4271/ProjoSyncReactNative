@@ -1,12 +1,14 @@
-import { useFonts } from "expo-font";
+import { useFonts } from 'expo-font';
 import React from 'react';
 import { Text, View } from 'react-native';
 import Routes from './routes';
+import { AuthProvider } from './context/AuthContext';
+import 'react-native-reanimated';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
-    "Satoshi": require("./assets/font/Satoshi-Variable.ttf"),
-    "Archivo": require("./assets/font/Archivo-Variable.ttf"),
+    Satoshi: require('./assets/font/Satoshi-Variable.ttf'),
+    Archivo: require('./assets/font/Archivo-Variable.ttf'),
   });
 
   // Attendez que les polices soient chargées
@@ -21,8 +23,9 @@ export default function App() {
   // Les polices sont chargées, vous pouvez rendre le reste de votre application
   return (
     <View style={{ flex: 1, backgroundColor: '#1C1C1C' }}>
-      <Routes />
+      <AuthProvider>
+        <Routes />
+      </AuthProvider>
     </View>
   );
 }
-
