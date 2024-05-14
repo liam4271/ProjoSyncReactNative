@@ -8,6 +8,8 @@ import TabBar from '../../component/TabBar';
 import NewProject from '../home/newProject';
 import Home from '../home/home';
 import MonProjetDetails from '../home/MonProjetDetails';
+import EnvoyeCandidature from '../home/EnvoyeCandidature';
+import VoirCandidature from '../home/VoirCandidature';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -18,6 +20,8 @@ const HomeStack = () => (
     <Stack.Screen name="projetScreen" component={Home} />
     <Stack.Screen name="newProject" component={NewProject} />
     <Stack.Screen name="monProjetDetails" component={MonProjetDetails} />
+    <Stack.Screen name="envoyeCandidature" component={EnvoyeCandidature} />
+    <Stack.Screen name="voirCandidature" component={VoirCandidature} />
   </Stack.Navigator>
 );
 
@@ -31,7 +35,7 @@ const AwardStack = () => (
 
 // Example stack for the Decouvrir tab
 const DecouvrirStack = () => (
-  <Stack.Navigator screenOptions={{ contentStyle: { backgroundColor: '#1C1C1C' } }}>
+  <Stack.Navigator screenOptions={{ contentStyle: { backgroundColor: '#1C1C1C' }, headerShown: false }}>
     <Stack.Screen name="decouvrirScreen" component={Decouvrir} />
     {/* Add more screens within the Decouvrir stack if needed */}
   </Stack.Navigator>

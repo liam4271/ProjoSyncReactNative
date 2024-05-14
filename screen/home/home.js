@@ -8,6 +8,7 @@ import SecondTitle from '../../component/SecondTitle';
 import ProjectPlus from '../../component/ProjectPlus';
 import Projet from '../../component/Projet';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import ProjetSuivi from '../../component/Home/ProjetSuivi';
 
 const Tab = createBottomTabNavigator();
 
@@ -21,8 +22,10 @@ const Home = ({ navigation }) => {
           <BtnFilter />
           <Research />
         </View>
-        <SecondTitle secondTitle="Mis en avant" />
+        <SecondTitle secondTitle="Projet réalisé" />
         <Projet navigation={navigation} />
+        <SecondTitle secondTitle="Projet suivis" />
+        <ProjetSuivi navigation={navigation} />
         <SecondTitle secondTitle="Contact" />
       </ScrollView>
     </SafeAreaView>

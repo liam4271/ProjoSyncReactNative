@@ -7,11 +7,12 @@ import ProjectPlus from '../../component/ProjectPlus';
 import InfoCompte from '../../component/compte/InfoCompte';
 import MesProjets from '../../component/compte/MesProjets';
 
+
 const Compte = ({ navigation }) => {
   const { signOut } = useAuthContext();
   return (
     <SafeAreaView>
-      <ScrollView style={styles.container}>
+      <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 50 }}>
         <ProjectPlus navigation={navigation} />
         <FirstTitle titleUp="Mon" titleDown="Compte" />
         <InfoCompte />

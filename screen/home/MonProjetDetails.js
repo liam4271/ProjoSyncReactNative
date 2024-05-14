@@ -1,18 +1,26 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, Pressable } from 'react-native';
+import { View, Text, StyleSheet, Image, Pressable, FlatList, ScrollView } from 'react-native';
 import { getRequest, postRequest } from '../../config/API';
 
-const MonProjetDetails = ({ route }) => {
+const MonProjetDetails = ({ route, navigation }) => {
+  const [isOwner, setIsOwner] = useState(false);
+  const [isInProjet, setIsInProjet] = useState(false);
   const [suiviStat, setSuiviStat] = useState(0);
   const [dejaSuivis, setDejaSuvis] = useState(false);
-  const { projet } = route.params;
+  const [projet, setProjet] = useState();
+  const { projetId } = route.params;
   const getSuiviStat = async () => {
     try {
-      console.log(projet);
-      const data = await getRequest(`/projet/${projet.id}/countSuivis`);
-      const dataStatus = await getRequest(`/projet/${projet.id}/me/statutSuivis`);
+      const dataProjet = await getRequest(`/projet/${projetId}`);
+      const data = await getRequest(`/projet/${projetId}/countSuivis`);
+      const dataStatus = await getRequest(`/projet/${projetId}/me/statutSuivis`);
+      const dataOwner = await getRequest(`/projet/${projetId}/me/checkOwner`);
+      const dataInProjet = await getRequest(`/projet/${projetId}/me/checkIsInProjet`);
+      setIsOwner(dataOwner);
+      setIsInProjet(dataInProjet);
       setSuiviStat(data);
       setDejaSuvis(dataStatus);
+      setProjet(dataProjet);
     } catch (err) {
       console.log(err);
     }
@@ -29,19 +37,55 @@ const MonProjetDetails = ({ route }) => {
       console.log(err);
     }
   };
+  const handleEnvoyeCandidature = () => {
+    navigation.navigate('envoyeCandidature', { projetId: projetId });
+  };
+  const handleVoirCandidature = () => {
+    navigation.navigate('voirCandidature', { projetId: projetId, projet, suiviStat });
+  };
+  if (!projet) {
+    return <Text>Loading...</Text>;
+  }
+
   return (
-    <View style={styles.container}>
-      <Pressable onPress={handleSuivreAcion}>
-        <Text>{dejaSuivis ? 'Suivis' : 'Suivre'}</Text>
-      </Pressable>
-      <Text>Suivi par {suiviStat}</Text>
+    <ScrollView contentContainerStyle={styles.container}>
+      {!isOwner && (
+        <Pressable onPress={handleSuivreAcion}>
+          <Text style={styles.nomProjet}>{dejaSuivis ? 'Suivis' : 'Suivre'}</Text>
+        </Pressable>
+      )}
+      <Text style={styles.nomProjet}>Suivi par {suiviStat}</Text>
       <Image source={{ uri: projet.image }} style={styles.image} />
       <View style={styles.detailsContainer}>
         <Text style={styles.nomProjet}>{projet.nom}</Text>
+        <Text style={styles.nomProjet}>{projet.description}</Text>
         <Text style={styles.statutProjet}>{projet.statut}</Text>
         <Text style={styles.autresDetails}>Ville: {projet.ville}</Text>
+        <Text style={styles.autresDetails}>Recherche</Text>
+        {isOwner && (
+          <Pressable onPress={handleVoirCandidature}>
+            <Text>Voir les candidature</Text>
+          </Pressable>
+        )}
+        {projet.profileProjet.map((profilProjet) => (
+          <View key={profilProjet.id}>
+            <Text>{profilProjet.profileCompetence.nom}</Text>
+            <Text>{profilProjet.description}</Text>
+          </View>
+        ))}
+        {isOwner ? (
+          <Pressable>
+            <Text>Modifier le projet</Text>
+          </Pressable>
+        ) : (
+          !isInProjet && (
+            <Pressable onPress={handleEnvoyeCandidature}>
+              <Text>Rejoindre le projet</Text>
+            </Pressable>
+          )
+        )}
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -62,15 +106,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   nomProjet: {
+    color: 'white',
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 10,
   },
   statutProjet: {
+    color: 'white',
     fontSize: 18,
     marginBottom: 10,
   },
   autresDetails: {
+    color: 'white',
     fontSize: 16,
     marginBottom: 5,
   },

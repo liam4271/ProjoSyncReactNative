@@ -1,19 +1,32 @@
 import { FormProvider, useForm } from 'react-hook-form';
 import { KeyboardAvoidingView, Pressable, StyleSheet, Text } from 'react-native';
 import InputText from '../../component/form/InputText';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuthContext } from '../../context/AuthContext';
-import { postRequest } from '../../config/API';
+import { getRequest, postRequest } from '../../config/API';
+import PickerInput from '../../component/form/PickerInput';
 
 const Register = ({ navigation }) => {
   const [isLoading, setIsloading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState();
+  const [competences, setCompetences] = useState([]);
   const { signIn } = useAuthContext();
 
   const methods = useForm();
   const { handleSubmit } = methods;
-
+  const fetchCompetence = async () => {
+    try {
+      const allCompetence = await getRequest('/competence', {}, false);
+      console.log(allCompetence);
+      setCompetences(allCompetence);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  useEffect(() => {
+    fetchCompetence();
+  }, []);
   const register = async (formValue) => {
     try {
       const data = await postRequest('/authentification/register', formValue, {}, false);
@@ -53,6 +66,11 @@ const Register = ({ navigation }) => {
           placeholder={'Mot de passe'}
           rules={{ required: 'Mot de passe obligatoire' }}
           password
+        />
+        <PickerInput
+          name="id_competence"
+          items={competences.map((competence) => ({ label: competence.nom, value: competence.id }))}
+          rules={{ required: 'Requis' }}
         />
         <Pressable
           style={isLoading ? styles.disabledBtn : styles.button}

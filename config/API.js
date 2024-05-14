@@ -1,4 +1,4 @@
-const API_URL = 'http://192.168.1.17:3001';
+const API_URL = 'http://192.168.0.10:3001';
 import * as SecureStore from 'expo-secure-store';
 
 const getToken = async () => {

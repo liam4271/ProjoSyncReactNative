@@ -45,7 +45,9 @@ export function AuthProvider(props) {
 
   const getCurrentUser = async () => {
     try {
-      await getRequest('/me');
+      console.log('here');
+      const data = await getRequest('/me');
+      console.log(data)
       setIsLoggedIn(true);
     } catch (err) {
       throw new Error(err.message);
