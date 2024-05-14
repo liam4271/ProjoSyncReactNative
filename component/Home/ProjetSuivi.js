@@ -1,18 +1,18 @@
-import { useCallback, useEffect, useState } from 'react';
-import { FlatList, ScrollView, Text, View } from 'react-native';
-import { getRequest } from '../../config/API';
+import { FlatList, Text, View } from 'react-native';
 import ProjetCard from '../ProjetCard';
+import { useCallback, useState } from 'react';
+import { getRequest } from '../../config/API';
 import { useFocusEffect } from '@react-navigation/native';
 
-const MesProjets = ({ navigation }) => {
-  const [mesProjets, setMesProjets] = useState([]);
+const ProjetSuivi = ({ navigation }) => {
+  const [projetsSuivi, setProjetsSuivi] = useState([]);
   const [isLoading, setIsloading] = useState(false);
 
   const fetchData = async () => {
     try {
       setIsloading(true);
-      const data = await getRequest('/projet/me');
-      setMesProjets(data);
+      const data = await getRequest('/projet/me/suivis');
+      setProjetsSuivi(data);
     } catch (err) {
       console.log(err);
     } finally {
@@ -32,17 +32,14 @@ const MesProjets = ({ navigation }) => {
 
   return (
     <View>
-      <View>
-        <Text>Projet créé</Text>
-      </View>
       {isLoading ? (
         <Text>Loading...</Text>
-      ) : mesProjets.length === 0 ? (
+      ) : projetsSuivi.length === 0 ? (
         <Text>Pas de projets à afficher</Text>
       ) : (
         <FlatList
           horizontal={true}
-          data={mesProjets}
+          data={projetsSuivi}
           renderItem={render}
           keyExtractor={(item) => item.id.toString()}
           contentContainerStyle={{ flexGrow: 1 }}
@@ -52,4 +49,4 @@ const MesProjets = ({ navigation }) => {
   );
 };
 
-export default MesProjets;
+export default ProjetSuivi;

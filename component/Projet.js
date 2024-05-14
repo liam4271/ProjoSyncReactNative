@@ -1,27 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import ProfilProjet from './ProfilProjet';
 import HeaderProjet from './HeaderProjet';
 import { getRequest } from '../config/API';
 import ProjetCard from './ProjetCard';
+import { useFocusEffect } from '@react-navigation/native';
 
 const Projet = ({ navigation }) => {
   const [loading, setLoading] = useState(true);
   const [projets, setProjets] = useState([]);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        setLoading(true);
-        const data = await getRequest('/projet');
-        console.log(data);
-        setProjets(data);
-        setLoading(false);
-      } catch (err) {
-        console.log(err);
-      }
-    })();
-  }, []);
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const data = await getRequest('/projet/me/participe');
+      setProjets(data);
+      setLoading(false);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  useFocusEffect(
+    useCallback(() => {
+      fetchData();
+    }, [])
+  );
 
   if (loading) {
     return (
@@ -35,6 +38,9 @@ const Projet = ({ navigation }) => {
     return <ProjetCard item={item.item} navigation={navigation} />;
   };
 
+  if (projets.length === 0) {
+    return <Text>Pas de projets</Text>;
+  }
   return (
     <View>
       <FlatList

@@ -13,7 +13,7 @@ const PickerInput = ({ name, items, rules }) => {
         control={control}
         rules={rules}
         name={name}
-        defaultValue={items[0].value}
+        defaultValue={items[0] ? items[0].value : ''}
         render={({ field: { onChange, onBlur, value } }) => (
           <Picker selectedValue={value} onValueChange={(itemValue) => onChange(itemValue)} style={styles.picker}>
             {items.map((item, index) => (

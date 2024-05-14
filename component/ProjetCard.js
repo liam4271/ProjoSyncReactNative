@@ -4,7 +4,7 @@ import ProfilProjet from './ProfilProjet';
 
 const ProjetCard = ({ item, navigation }) => {
   const navigateToDetails = (item) => {
-    navigation.navigate('monProjetDetails', { projet: item });
+    navigation.navigate('monProjetDetails', { projetId: item.id });
   };
   return (
     <TouchableOpacity onPress={() => navigateToDetails(item)}>

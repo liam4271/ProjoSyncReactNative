@@ -7,7 +7,7 @@ import { postRequest } from '../../config/API';
 import { Picker } from '@react-native-picker/picker';
 import PickerInput from '../../component/form/PickerInput';
 
-const NewProject = () => {
+const NewProject = ({ navigation }) => {
   const [profilListe, setProfilListe] = useState([]);
   const methods = useForm();
   const methodsProfil = useForm();
@@ -19,8 +19,10 @@ const NewProject = () => {
   const onSubmit = async (data) => {
     const value = { ...data, profilRecherche: profilListe };
     console.log(value);
-    await postRequest('/projet', value);
+    const createdProjet = await postRequest('/projet', value);
     methods.reset();
+    console.log(createdProjet);
+    navigation.navigate('monProjetDetails', { projetId: createdProjet.id });
   };
   const Item = ({ item }) => {
     return (

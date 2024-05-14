@@ -4,12 +4,19 @@ import { View, Text } from 'react-native';
 
 const InfoCompte = () => {
   const [detailCompte, setDetailCompte] = useState();
-  useEffect(() => {
-    (async () => {
+
+  const fetchData = async () => {
+    try {
       const data = await getRequest('/me');
       setDetailCompte(data);
-    })();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  useEffect(() => {
+    fetchData();
   }, []);
+
   if (!detailCompte) {
     return (
       <View>
@@ -17,6 +24,7 @@ const InfoCompte = () => {
       </View>
     );
   }
+
   return (
     <View>
       <Text>
